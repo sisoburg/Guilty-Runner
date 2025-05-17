@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guilty Runner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
+    <style>
+        /* Add emoji picker styles */
+        .emoji-picker {
+            position: relative;
+        }
+        
+        .emoji-picker__content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+        }
+        
+        .emoji-picker__overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+        }
+        
+        /* Grandchild specific styles */
+        .grandchild-item {
+            background: linear-gradient(135deg, #ff9fd8, #ffb6c1);
+            border: 2px dashed #ff69b4;
+        }
+        
+        .grandchild-name {
+            color: #800080;
+            font-weight: bold;
+        }
+        
+        .grandchild-name-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        
+        .avatar-upload.fullwidth {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Popup styles for grandchildren */
+        .popup.grandchild {
+            background: linear-gradient(135deg, #ff9fd8, #ffb6c1);
+            border: 3px dashed #ff69b4;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.5);
+        }
+        
+        .popup.grandchild .popup-value {
+            color: #800080;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button id="muteBtn" class="mute-btn" title="Mute/Unmute">🔊</button>
+        <header>
+            <h1>Guilty Runner</h1>
+            <div class="game-info">
+                <p>Run, swim, and cycle your way to a guilt-free life!</p>
+                <div class="instructions">
+                    <h2>How to Play</h2>
+                    <div class="instruction-goal" style="text-align:center; margin-bottom:2rem;">
+                        <strong style="font-size:1.3em; color:#ffd700;">Main Goal:</strong>
+                        <span style="font-size:1.1em; color:#fff;"> Keep the <b>guilt-o-meter</b> as low as possible! If it fills up, it's game over.</span>
+                        <div style="display:flex; flex-direction:column; align-items:center; margin-top:1.2em;">
+                            <span style="font-size:1.1em; color:#fff; margin-bottom:0.3em;">Guilt-o-meter example:</span>
+                            <svg width="320" height="36" viewBox="0 0 320 36" style="max-width:100%;">
+                                <rect x="0" y="8" width="320" height="20" rx="10" fill="black" stroke="white" stroke-width="2"/>
+                                <linearGradient id="guiltGradient" x1="0" y1="0" x2="320" y2="0" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#4dff4d"/>
+                                    <stop offset="50%" stop-color="#ffd700"/>
+                                    <stop offset="100%" stop-color="#ff4500"/>
+                                </linearGradient>
+                                <rect x="0" y="8" width="160" height="20" rx="10" fill="url(#guiltGradient)"/>
+                                <text x="160" y="28" text-anchor="middle" fill="white" font-family="'Press Start 2P', 'Secular One', sans-serif" font-size="16">GUILT-O-METER</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="instruction-grid">
+                        <div class="instruction-item">
+                            <span class="instruction-icon">🎯</span>
+                            <h3>Move Your Character</h3>
+                            <p>Use your mouse to guide your character through the environment</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">✅</span>
+                            <h3>Collect Tasks</h3>
+                            <p>Grab tasks to reduce your guilt meter and earn points</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">⚠️</span>
+                            <h3>Avoid Obstacles</h3>
+                            <p>Watch out for obstacles that will slow you down</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">🏃‍♀️</span>
+                            <h3>Progress Through Environments</h3>
+                            <p>Every 333 points, you'll advance to a new environment:
+                                <br>🏃‍♀️ Running → 🏊‍♀️ Swimming → 🚴‍♀️ Cycling</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="startBtn">START GAME</button>
+                <button id="adminBtn">ADMIN PANEL</button>
+            </div>
+        </header>
+
+        <main class="canvas-container">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+        </main>
+
+        <div class="mobile-controls">
+            <button id="jumpBtn">JUMP</button>
+        </div>
+        
+        <div class="admin-panel-backdrop" id="adminPanelBackdrop"></div>
+        <div class="admin-panel" id="adminPanel">
+            <button class="admin-close-x" id="adminCloseX">×</button>
+            <h2>ADMIN PANEL</h2>
+            <div class="admin-lists">
+                <div class="admin-list-section">
+                    <h3>Tasks</h3>
+                    <div class="task-list" id="taskList"></div>
+                    <button class="add-btn" id="showAddTaskForm">Add Task</button>
+                </div>
+                <div class="admin-list-section">
+                    <h3>Obstacles</h3>
+                    <div class="task-list" id="obstacleList"></div>
+                    <button class="add-btn" id="showAddObstacleForm">Add Obstacle</button>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for Add/Edit Task/Obstacle -->
+        <div class="admin-modal" id="adminModal">
+            <div class="admin-modal-content" id="adminModalContent">
+                <!-- Form will be injected here by JS -->
+            </div>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <h2>GAME OVER</h2>
+            <p id="gameOverReason"></p>
+            <p>Your score: <span id="finalScore">0</span></p>
+            <button id="restartBtn">PLAY AGAIN</button>
+        </div>
+
+        <!-- Popup for collected items -->
+        <div id="collectionPopup" class="popup">
+            <div class="popup-content">
+                <div class="popup-emoji"></div>
+                <img class="popup-avatar" style="display: none;">
+                <div class="popup-text"></div>
+                <div class="popup-value"></div>
+            </div>
+        </div>
+
+        <!-- Add a separate popup for guilt messages -->
+        <div id="guiltPopup" class="popup bottom-center">
+            <div class="popup-content">
+                <div class="popup-emoji"></div>
+                <div class="popup-text"></div>
+                <div class="popup-value"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Remove theme controls styles */
+        .theme-controls {
+            display: none;
+        }
+        
+        .theme-btn {
+            display: none;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.8);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+    </style>
+
+    <script type="module">
+        import { Game } from './js/classes/Game.js';
+        import { AdminPanel } from './js/utils/AdminPanel.js';
+
+        // Wait for fonts to load
+        document.fonts.ready.then(() => {
+            const canvas = document.getElementById('gameCanvas');
+            const container = document.querySelector('.canvas-container');
+            const header = document.querySelector('header');
+            
+            function resizeCanvas() {
+                // Get the container dimensions
+                const containerRect = container.getBoundingClientRect();
+                
+                // Set canvas size to match container
+                canvas.width = containerRect.width;
+                canvas.height = containerRect.height;
+                
+                // Update game dimensions if game exists
+                if (window.game) {
+                    window.game.width = canvas.width;
+                    window.game.height = canvas.height;
+                    window.game.ground = canvas.height * 0.8; // Ground at 80% of height
+                    window.game.updateDimensions(); // Add this line to update all game dimensions
+                }
+            }
+            
+            // Initial resize
+            resizeCanvas();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+            });
+            
+            // Initialize game
+            window.game = new Game(canvas);
+            window.game.init();
+            
+            // Initialize admin panel
+            window.adminPanel = new AdminPanel(window.game);
+            
+            // Start button
+            document.getElementById('startBtn').addEventListener('click', () => {
+                if (!window.game.running) {
+                    header.classList.add('hidden');
+                    window.game.start();
+                }
+            });
+            
+            // Restart button
+            document.getElementById('restartBtn').addEventListener('click', () => {
+                document.getElementById('gameOver').style.display = 'none';
+                header.classList.remove('hidden');
+                window.game.reset();
+                window.game.start();
+            });
+            
+            // Jump button (mobile)
+            document.getElementById('jumpBtn').addEventListener('click', () => {
+                if (window.game.running) {
+                    window.game.player.jump();
+                }
+            });
+        });
+    </script>
+    <!-- <script type="module" src="js/main.js"></script> -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.12.1/index.js"></script>
+    <style>
+        emoji-picker {
+            --background: #222;
+            --border-color: #444;
+            --button-active-background: #444;
+            --button-hover-background: #333;
+            --category-emoji-padding: 0.5rem;
+            --category-emoji-size: 1.5rem;
+            --category-font-color: #fff;
+            --category-font-size: 0.8rem;
+            --indicator-color: #ff6a33;
+            --num-columns: 8;
+            --outline-color: #666;
+            --outline-size: 1px;
+            --skintone-dropdown-border-color: #444;
+        }
+    </style>
+</body>
+</html> 
