@@ -1322,8 +1322,8 @@ export class Game {
         const nextEnvironment = this.environments[this.currentEnvironmentIndex];
         const envImages = {
             RUNNING: 'img/running.png',
-            SWIMMING: 'img/Swimming.png',
-            CYCLING: 'img/Cycling.png'
+            SWIMMING: 'img/swimming.png',
+            CYCLING: 'img/cycling.png'
         };
         
         // Get environment names for display
