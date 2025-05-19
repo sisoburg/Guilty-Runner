@@ -1566,6 +1566,7 @@ export class Game {
             this.soundtrack.volume = 0.5;
             this.soundtrack.muted = this.isMuted;
         }
+        
         this.soundtrack.currentTime = 0;
         this.soundtrack.play();
     }
