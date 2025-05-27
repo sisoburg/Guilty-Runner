@@ -1,0 +1,94 @@
+{
+  "tasks": [
+    {
+      "name": "תרופה לפפי",
+      "guiltValue": 4,
+      "emoji": null,
+      "avatar": "img/papi 2.png"
+    },
+    {
+      "name": "תרומת כליה לסוכית",
+      "guiltValue": 8,
+      "emoji": null,
+      "avatar": "img/sukit 2.png"
+    },
+    {
+      "name": "צנתור לאברום",
+      "guiltValue": 7,
+      "emoji": null,
+      "avatar": "img/Avrum.png"
+    },
+    {
+      "name": "נאווה מתקשרת",
+      "guiltValue": 10,
+      "emoji": "☎️",
+      "avatar": null
+    },
+    {
+      "name": "בייביסיטר לנתן",
+      "guiltValue": 4,
+      "emoji": null,
+      "avatar": "img/Natan.png"
+    },
+    {
+      "name": "מסיבת סיום למצי",
+      "guiltValue": 6,
+      "emoji": null,
+      "avatar": "img/Mazi.png"
+    },
+    {
+      "name": "בייביסיטרה לאיתי",
+      "guiltValue": 3,
+      "emoji": null,
+      "avatar": "img/Itay.png"
+    },
+    {
+      "name": "דן ואלונה באים לנטף",
+      "guiltValue": 3,
+      "emoji": null,
+      "avatar": "img/Dan_2.png"
+    },
+    {
+      "name": "בייביסיטר לרוני",
+      "guiltValue": 4,
+      "emoji": null,
+      "avatar": "img/Roni.png"
+    },
+    {
+      "name": "משמרות 101",
+      "guiltValue": 6,
+      "emoji": null,
+      "avatar": "img/101.png"
+    },
+    {
+      "name": "פגישה עם דנה ברודט",
+      "guiltValue": 10,
+      "emoji": null,
+      "avatar": "img/dana.png"
+    },
+    {
+      "name": "הליכה עם עדנה",
+      "guiltValue": 4,
+      "emoji": null,
+      "avatar": "img/Edna.png"
+    },
+    {
+      "name": "אביטל מתקשרת",
+      "guiltValue": 3,
+      "emoji": null,
+      "avatar": "img/Avital.png"
+    },
+    {
+      "name": "פפי נסיון",
+      "guiltValue": 1,
+      "emoji": null,
+      "avatar": "img/papi 2.png"
+    },
+    {
+      "name": "sss",
+      "guiltValue": 1,
+      "emoji": null,
+      "avatar": "http://127.0.0.1:5500/img/papi%202.png"
+    }
+  ]
+}
